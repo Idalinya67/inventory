@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>StockFlow - Enhanced College Inventory Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/main.css">
+  </head>
+  <body class="bg-gray-100 min-h-screen">
+    <!-- Login Page -->
+    <div id="loginPage" class="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-500 to-indigo-700">
+      <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md">
+        <div class="text-center mb-8">
+          <h1 class="text-3xl font-bold text-gray-800 mb-2">StockFlow</h1>
+          <p class="text-gray-600">Enhanced College Inventory Management</p>
+        </div>
+        <form id="loginForm">
+          <div class="mb-4">
+            <label
+              for="username"
+              class="block text-gray-700 text-sm font-bold mb-2"
+              >Username</label
+            >
+            <input
+              type="text"
+              id="username"
+              class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              placeholder="Enter your username"
+              required
+            />
+          </div>
+          <div class="mb-6">
+            <label
+              for="password"
+              class="block text-gray-700 text-sm font-bold mb-2"
+              >Password</label
+            >
+            <input
+              type="password"
+              id="password"
+              class="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              placeholder="Enter your password"
+              required
+            />
+          </div>
+          <div class="flex items-center justify-between">
+            <button
+              type="submit"
+              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded focus:outline-none focus:shadow-outline w-full"
+            >
+              Sign In
+            </button>
+          </div>
+          <div class="mt-4 text-center">
+            <p class="text-gray-600 text-sm">
+              Demo credentials: admin / password123
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="appPage" class="hidden">
+      <!-- Header -->
+      <header class="bg-white shadow-md">
+        <div class="flex justify-between items-center px-6 py-4">
+          <div class="flex items-center">
+            <button
+              id="sidebarToggle"
+              class="text-gray-500 mr-4 focus:outline-none"
+            >
+              <i class="fas fa-bars text-xl"></i>
+            </button>
+            <h1 class="text-2xl font-bold text-gray-800">
+              StockFlow
+            </h1>
+          </div>
+          <div class="flex items-center">
+            <div class="mr-4 flex items-center">
+              <span class="mr-2 text-gray-700">Theme:</span>
+              <div class="theme-selector bg-blue-500" data-theme="blue"></div>
+              <div class="theme-selector bg-green-500" data-theme="green"></div>
+              <div class="theme-selector bg-purple-500" data-theme="purple"></div>
+              <div class="theme-selector bg-red-500" data-theme="red"></div>
+            </div>
+            <button
+              id="downloadReport"
+              class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg flex items-center mr-4"
+            >
+              <i class="fas fa-download mr-2"></i> Download Report
+            </button>
+            <div class="relative">
+              <button class="flex items-center focus:outline-none">
+                <div
+                  class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold"
+                >
+                  A
+                </div>
+                <span class="ml-2 text-gray-700">Admin</span>
+                <i class="fas fa-chevron-down ml-2 text-gray-500"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <div class="flex">
+        <!-- Sidebar -->
+         
+        <aside
+          id="sidebar"
+          class="sidebar bg-gray-800 text-white w-64 min-h-screen py-6"
+        >
+          <nav>
+            <ul>
+              <li class="mb-2">
+                <a
+                  href="#"
+                  class="dashboard-tab tab-active flex items-center px-6 py-3 bg-blue-600"
+                >
+                  <i class="fas fa-chart-line mr-3"></i> Dashboard
+                </a>
+              </li>
+              <li class="mb-2">
+                <a
+                  href="#"
+                  class="inventory-tab flex items-center px-6 py-3 hover:bg-gray-700"
+                >
+                  <i class="fas fa-boxes mr-3"></i> Inventory
+                </a>
+              </li>
+              <li class="mb-2">
+                <a
+                  href="#"
+                  class="users-tab flex items-center px-6 py-3 hover:bg-gray-700"
+                >
+                  <i class="fas fa-users mr-3"></i> Users
+                </a>
+              </li>
+              <li class="mb-2">
+                <a
+                  href="#"
+                  class="receipts-tab flex items-center px-6 py-3 hover:bg-gray-700"
+                >
+                  <i class="fas fa-file-invoice-dollar mr-3"></i> Receipts & Issues
+                </a>
+              </li>
+              <li class="mb-2">
+                <a
+                  href="#"
+                  class="ai flex items-center px-6 py-3 hover:bg-gray-700"
+                >
+                  <i class="fas fa-robot mr-3"></i> AI Assistant
+                </a>
+              </li>
+              <li class="mb-2">
+                <a
+                  href="#"
+                  class="timeline-tab flex items-center px-6 py-3 hover:bg-gray-700"
+                >
+                  <i class="fas fa-history mr-3"></i> Timeline
+                </a>
+              </li>
+              <li class="mb-2">
+                <a
+                  href="#"
+                  class="reports-tab flex items-center px-6 py-3 hover:bg-gray-700"
+                >
+                  <i class="fas fa-chart-bar mr-3"></i> Reports
+                </a>
+              </li>
+              <li class="mb-2">
+                <a
+                  href="#"
+                  class="settings-tab flex items-center px-6 py-3 hover:bg-gray-700"
+                >
+                  <i class="fas fa-cog mr-3"></i> Settings
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6">
+          <!-- Dashboard Section -->
+          <section id="dashboardSection" class="content-section">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">
+              Dashboard Overview
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              <div class="dashboard-card bg-white rounded-lg shadow-md p-6">
+                <div class="flex justify-between items-center">
+                  <div>
+                    <p class="text-gray-500 text-sm">
+                      Total Items
+                    </p>
+                    <h3 class="text-3xl font-bold text-gray-800" id="totalItems">
+                      0
+                    </h3>
+                  </div>
+                  <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                    <i class="fas fa-box text-blue-500 text-xl"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div class="dashboard-card bg-white rounded-lg shadow-md p-6">
+                <div class="flex justify-between items-center">
+                  <div>
+                    <p class="text-gray-500 text-sm">
+                      Low Stock Items
+                    </p>
+                    <h3 class="text-3xl font-bold text-gray-800" id="lowStockItems">
+                      0
+                    </h3>
+                  </div>
+                  <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
+                    <i class="fas fa-exclamation-triangle text-red-500 text-xl"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div class="dashboard-card bg-white rounded-lg shadow-md p-6">
+                <div class="flex justify-between items-center">
+                  <div>
+                    <p class="text-gray-500 text-sm">
+                      Total Value
+                    </p>
+                    <h3 class="text-3xl font-bold text-gray-800" id="totalValue">
+                      Ksh0.00
+                    </h3>
+                  </div>
+                  <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+                    <i class="fas fa-dollar-sign text-green-500 text-xl"></i>
+                  </div>
+                </div>
+              </div>
+
+              <div class="dashboard-card bg-white rounded-lg shadow-md p-6">
+                <div class="flex justify-between items-center">
+                  <div>
+                    <p class="text-gray-500 text-sm">
+                      Sustainability Score
+                    </p>
+                    <h3 class="text-3xl font-bold text-gray-800" id="sustainabilityScore">
+                      0%
+                    </h3>
+                  </div>
+                  <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center">
+                    <i class="fas fa-leaf text-purple-500 text-xl"></i>
+                  </div>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
+                  <div id="sustainabilityBar" class="bg-green-600 h-2 rounded-full" style="width: 0%"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                  Department Spending
+                </h3>
+                <div class="chart-container">
+                  <canvas id="departmentSpendingChart"></canvas>
+                </div>
+              </div>
+
+              <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                  Forecasted Shortages
+                </h3>
+                <div id="forecastShortages" class="h-64 overflow-y-auto">
+                  <!-- Forecasted shortages will be populated here -->
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                  Items Expiring Soon
+                </h3>
+                <div id="expiringItems" class="h-64 overflow-y-auto">
+                  <!-- Expiring items will be populated here -->
+                </div>
+              </div>
+
+              <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                  AI Stock Assistant
+                </h3>
+                <div class="mb-4">
+                  <input
+                    type="text"
+                    id="aiQuery"
+                    placeholder="Ask about stock levels, trends, or recommendations..."
+                    class="w-full p-3 border rounded-lg"
+                  />
+                </div>
+                <button
+                  id="askAI"
+                  class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg w-full"
+                >
+                  <i class="fas fa-robot mr-2"></i> Ask AI Assistant
+                </button>
+                <div id="aiResponse" class="mt-4 p-4 bg-gray-100 rounded-lg h-32 overflow-y-auto">
+                  <p class="text-gray-500">
+                    Ask me about inventory status, predictions, or recommendations.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Inventory Section -->
+          <section id="inventorySection" class="content-section hidden">
+            <div class="flex justify-between items-center mb-6">
+              <h2 class="text-2xl font-semibold text-gray-800">
+                Inventory Management
+              </h2>
+              <button
+                id="addItemBtn"
+                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center"
+              >
+                <i class="fas fa-plus mr-2"></i> Add New Item
+              </button>
+            </div>
+
+            <div class="bg-white shadow-md rounded-lg overflow-hidden">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Code</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Expiry Date</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="inventoryTable" class="bg-white divide-y divide-gray-200">
+                  <!-- Inventory items will be populated here -->
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- Users Section -->
+          <section id="usersSection" class="content-section hidden">
+            <div class="flex justify-between items-center mb-6">
+              <h2 class="text-2xl font-semibold text-gray-800">
+                User Management
+              </h2>
+              <button
+                id="addUserBtn"
+                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center"
+              >
+                <i class="fas fa-user-plus mr-2"></i> Add New User
+              </button>
+            </div>
+
+            <div class="bg-white shadow-md rounded-lg overflow-hidden">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Department</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Items Issued</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="usersTable" class="bg-white divide-y divide-gray-200">
+                  <!-- Users will be populated here -->
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- Receipts & Issues Section -->
+          <section id="receiptsSection" class="content-section hidden">
+            <div class="flex justify-between items-center mb-6">
+              <h2 class="text-2xl font-semibold text-gray-800">
+                Receipts and Issues
+              </h2>
+              <div class="flex items-center">
+                <label class="flex items-center mr-4 text-gray-700">
+                  <span class="mr-2">Emergency Mode:</span>
+                  <label class="emergency-toggle">
+                    <input type="checkbox" id="emergencyModeToggle" />
+                    <span class="emergency-slider"></span>
+                  </label>
+                </label>
+                <button
+                  id="addReceiptBtn"
+                  class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center mr-2"
+                >
+                  <i class="fas fa-plus mr-2"></i> New Receipt
+                </button>
+                <button
+                  id="issueItemBtn"
+                  class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg flex items-center"
+                >
+                  <i class="fas fa-hand-holding mr-2"></i> Issue to User
+                </button>
+              </div>
+            </div>
+
+            <div class="bg-white shadow-md rounded-lg overflow-hidden mb-6">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item Code</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item Name</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Department</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">From/To</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="receiptsTable" class="bg-white divide-y divide-gray-200">
+                  <!-- Receipts data will be populated here -->
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <!-- AI Assistant Section -->
+          <section id="aiAssistantSection" class="content-section hidden">
+            <!-- Content will be loaded dynamically -->
+          </section>
+
+          <!-- Timeline Section -->
+          <section id="timelineSection" class="content-section hidden">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">
+              Stock Movement Timeline
+            </h2>
+
+            <div class="bg-white rounded-lg shadow-md p-6">
+              <div id="timelineContainer" class="space-y-6">
+                <!-- Timeline items will be populated here -->
+              </div>
+            </div>
+          </section>
+
+          <!-- Reports Section -->
+          <section id="reportsSection" class="content-section hidden">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">
+              Reports & Analytics
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                  Inventory Summary
+                </h3>
+                <div class="chart-container">
+                  <canvas id="inventorySummaryChart"></canvas>
+                </div>
+              </div>
+
+              <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                  Stock Value by Category
+                </h3>
+                <div class="chart-container">
+                  <canvas id="categoryValueChart"></canvas>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+              <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                Generate Custom Report
+              </h3>
+              <div class="flex flex-wrap gap-4">
+                <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">
+                  <i class="fas fa-file-pdf mr-2"></i> PDF Report
+                </button>
+                <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
+                  <i class="fas fa-file-excel mr-2"></i> Excel Report
+                </button>
+                <button class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">
+                  <i class="fas fa-print mr-2"></i> Print Report
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Settings Section -->
+          <section id="settingsSection" class="content-section hidden">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">
+              System Settings
+            </h2>
+
+            <div class="bg-white shadow-md rounded-lg overflow-hidden p-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                    General Settings
+                  </h3>
+
+                  <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Institution Name</label>
+                    <input
+                      type="text"
+                      id="companyName"
+                      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      value="College StockFlow"
+                    />
+                  </div>
+
+                  <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Currency</label>
+                    <select id="currency" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                      <option value="USD ($)">USD ($)</option>
+                      <option value="KES (KSh)" selected>KES (KSh)</option>
+                      <option value="EUR (€)">EUR (€)</option>
+                      <option value="GBP (£)">GBP (£)</option>
+                    </select>
+                  </div>
+
+                  <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Date Format</label>
+                    <select id="dateFormat" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                      <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+                      <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+                      <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                    Inventory Settings
+                  </h3>
+
+                  <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Low Stock Threshold</label>
+                    <input
+                      type="number"
+                      id="lowStockThreshold"
+                      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      value="5"
+                    />
+                  </div>
+
+                  <div class="mb-4 flex items-center">
+                    <input type="checkbox" id="emailNotifications" class="mr-2" checked />
+                    <label for="emailNotifications" class="text-gray-700 text-sm">Enable Email Notifications</label>
+                  </div>
+
+                  <div class="mb-4 flex items-center">
+                    <input type="checkbox" id="autoBackup" class="mr-2" checked />
+                    <label for="autoBackup" class="text-gray-700 text-sm">Enable Auto Backup</label>
+                  </div>
+
+                  <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2">Backup Frequency</label>
+                    <select id="backupFrequency" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                      <option value="Daily">Daily</option>
+                      <option value="Weekly">Weekly</option>
+                      <option value="Monthly">Monthly</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-6 flex justify-between">
+                <button id="resetSettings" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg">
+                  Reset to Defaults
+                </button>
+                <button id="saveSettings" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">
+                  Save Settings
+                </button>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <!-- Add Item Modal -->
+    <div id="addItemModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden z-50">
+      <div class="bg-white rounded-lg shadow-xl w-11/12 md:w-3/4 lg:w-1/2 max-h-screen overflow-y-auto">
+        <div class="p-6">
+          <h3 class="text-xl font-semibold text-gray-800 mb-4">
+            Add New Item
+          </h3>
+          <form id="addItemForm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label for="itemCode" class="block text-sm font-medium text-gray-700">Item Code</label>
+                <input
+                  type="text"
+                  id="itemCode"
+                  class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                  required
+                />
+              </div>
+              <div>
+                <label for="itemName" class="block text-sm font-medium text-gray-700">Item Name</label>
+                <input
+                  type="text"
+                  id="itemName"
+                  class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label for="itemCategory" class="block text-sm font-medium text-gray-700">Category</label>
+                <select id="itemCategory" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" required>
+                  <option value="">Select Category</option>
+                  <option value="Stationery">Stationery</option>
+                  <option value="Lab Equipment">Lab Equipment</option>
+                  <option value="Cleaning Supplies">Cleaning Supplies</option>
+                  <option value="Electronics">Electronics</option>
+                  <option value="Furniture">Furniture</option>
+                  <option value="Sports Equipment">Sports Equipment</option>
+                </select>
+              </div>
+              <div>
+                <label for="itemPrice" class="block text-sm font-medium text-gray-700">Unit Price (KES)</label>
+                <input
+                  type="number"
+                  id="itemPrice"
+                  min="0"
+                  step="0.01"
+                  class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label for="itemQuantity" class="block text-sm font-medium text-gray-700">Quantity</label>
+                <input
+                  type="number"
+                  id="itemQuantity"
+                  min="0"
+                  class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                  required
+                />
+              </div>
+              <div>
+                <label for="itemReorderLevel" class="block text-sm font-medium text-gray-700">Reorder Level</label>
+                <input
+                  type="number"
+                  id="itemReorderLevel"
+                  min="0"
+                  class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label for="itemExpiryDate" class="block text-sm font-medium text-gray-700">Expiry Date (Optional)</label>
+              <input
+                type="date"
+                id="itemExpiryDate"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              />
+            </div>
+
+            <div class="flex justify-end">
+              <button
+                type="button"
+                id="cancelAddItem"
+                class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg mr-2"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
+              >
+                Add Item
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add User Modal -->
+    <div id="addUserModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden z-50">
+      <div class="bg-white rounded-lg shadow-xl w-11/12 md:w-3/4 lg:w-1/2 max-h-screen overflow-y-auto">
+        <div class="p-6">
+          <h3 class="text-xl font-semibold text-gray-800 mb-4">
+            Add New User
+          </h3>
+          <form id="addUserForm">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label for="userName" class="block text-sm font-medium text-gray-700">Full Name</label>
+                <input
+                  type="text"
+                  id="userName"
+                  class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                  required
+                />
+              </div>
+              <div>
+                <label for="userRole" class="block text-sm font-medium text-gray-700">Role</label>
+                <select id="userRole" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" required>
+                  <option value="">Select Role</option>
+                  <option value="Administrator">Administrator</option>
+                  <option value="Store Manager">Store Manager</option>
+                  <option value="Department Head">Department Head</option>
+                  <option value="Staff">Staff</option>
+                  <option value="Student">Student</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label for="userDepartment" class="block text-sm font-medium text-gray-700">Department</label>
+                <select id="userDepartment" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" required>
+                  <option value="">Select Department</option>
+                  <option value="Administration">Administration</option>
+                  <option value="Science">Science</option>
+                  <option value="Mathematics">Mathematics</option>
+                  <option value="Humanities">Humanities</option>
+                  <option value="Sports">Sports</option>
+                  <option value="Library">Library</option>
+                </select>
+              </div>
+              <div>
+                <label for="userEmail" class="block text-sm font-medium text-gray-700">Email</label>
+                <input
+                  type="email"
+                  id="userEmail"
+                  class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="flex justify-end">
+              <button
+                type="button"
+                id="cancelAddUser"
+                class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg mr-2"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
+              >
+                Add User
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Receipt Modal -->
+    <div id="addReceiptModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden z-50">
+      <div class="bg-white rounded-lg shadow-xl w-11/12 md:w-3/4 lg:w-1/2 max-h-screen overflow-y-auto">
+        <div class="p-6">
+          <h3 class="text-xl font-semibold text-gray-800 mb-4">
+            New Receipt
+            </h3>
+          <form id="addReceiptForm">
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 mb-2">Transaction Type</label>
+              <div class="flex space-x-4">
+                <label class="inline-flex items-center">
+                  <input type="radio" name="receiptType" value="receive" checked class="form-radio" />
+                  <span class="ml-2">Receive</span>
+                </label>
+                <label class="inline-flex items-center">
+                  <input type="radio" name="receiptType" value="issue" class="form-radio" />
+                  <span class="ml-2">Issue</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label for="receiptItem" class="block text-sm font-medium text-gray-700">Item</label>
+                <select id="receiptItem" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" required>
+                  <option value="">Select Item</option>
+                </select>
+              </div>
+              <div>
+                <label for="receiptQuantity" class="block text-sm font-medium text-gray-700">Quantity</label>
+                <input
+                  type="number"
+                  id="receiptQuantity"
+                  min="1"
+                  class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label for="receiptDepartment" class="block text-sm font-medium text-gray-700">Department</label>
+                <select id="receiptDepartment" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" required>
+                  <option value="">Select Department</option>
+                  <option value="Administration">Administration</option>
+                  <option value="Science">Science</option>
+                  <option value="Mathematics">Mathematics</option>
+                  <option value="Humanities">Humanities</option>
+                  <option value="Sports">Sports</option>
+                  <option value="Library">Library</option>
+                </select>
+              </div>
+              <div>
+                <label for="receiptReference" class="block text-sm font-medium text-gray-700">Reference Number</label>
+                <input
+                  type="text"
+                  id="receiptReference"
+                  class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label for="receiptNotes" class="block text-sm font-medium text-gray-700">Notes</label>
+              <textarea
+                id="receiptNotes"
+                rows="3"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+              ></textarea>
+            </div>
+
+            <div class="flex justify-end">
+              <button
+                type="button"
+                id="cancelAddReceipt"
+                class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-lg mr-2"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg"
+              >
+                Save Receipt
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script src="js/inventory.js"></script>
+    <script src="js/users.js"></script>
+    <script src="js/receipts.js"></script>
+    <script src="js/ai-assistant.js"></script>
+    <script src="js/timeline.js"></script>
+    <script src="js/reports.js"></script>
+    <script src="js/settings.js"></script>
+  </body>
+</html>
