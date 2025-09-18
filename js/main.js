@@ -1,5 +1,4 @@
 // Main application functionality
-
 document.addEventListener('DOMContentLoaded', function() {
   // Initialize storage
   if (typeof initializeStorage === 'function') {
@@ -42,7 +41,10 @@ document.addEventListener('DOMContentLoaded', function() {
   
         // Show target section
         contentSections.forEach((section) => section.classList.add("hidden"));
-        document.getElementById(targetSection).classList.remove("hidden");
+        const targetEl = document.getElementById(targetSection);
+        if (targetEl) {
+          targetEl.classList.remove("hidden");
+        }
   
         // Load section-specific data
         if (targetSection === "dashboardSection" && typeof updateDashboard === 'function') {
@@ -141,4 +143,10 @@ function changeTheme(theme) {
       button.classList.add(colors.primary, colors.hover);
     }
   });
+}
+
+// ✅ Added AI Assistant loader
+function loadAIAssistant() {
+  console.log("AI Assistant loaded");
+  // You can later add your actual AI UI initialization here
 }
