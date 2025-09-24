@@ -15,7 +15,6 @@ function initializeStorage() {
         expiryDate: null,
         dailyUsage: 5,
       },
-     
     ];
     localStorage.setItem("inventory", JSON.stringify(sampleInventory));
   }
@@ -26,11 +25,10 @@ function initializeStorage() {
         id: 1,
         name: "Dr. Jane Smith",
         role: "Administrator",
-        department: "Administration",
-        email: "jane.kiprono@college.edu",
+        department: "Procurement",
+        email: "jane.smith@college.edu",
         itemsIssued: 15,
       },
-
     ];
     localStorage.setItem("users", JSON.stringify(sampleUsers));
   }
@@ -47,7 +45,6 @@ function initializeStorage() {
         reference: "REC-001",
         notes: "Initial stock",
       },
-     
     ];
     localStorage.setItem(
       "transactions",
@@ -57,13 +54,21 @@ function initializeStorage() {
 
   if (!localStorage.getItem("departments")) {
     const sampleDepartments = [
-      "Administration",
-      "Business",
-      "Engineering",
-      "Humanities",
-      "Sports",
-      "Library",
-      "Store",
+      "Procurement",
+      "Human Resource",
+      "Maintenance",
+      "Kitchen",
+      "Registry",
+      "Dispensary",
+      "Agriculture and Environmental Studies",
+      "Applied Sciences",
+      "Building and Civil Engineering",
+      "Business and Liberal Studies",
+      "Computing and Informatics",
+      "Electrical and Electronics",
+      "Health Sciences",
+      "Hospitality and Institutional Management",
+      "Mechanical and Automotives"
     ];
     localStorage.setItem(
       "departments",
