@@ -166,55 +166,77 @@ function updateDepartmentSpendingChart(transactions, inventory) {
         departmentSpendingChart.destroy();
     }
 
-    // Create new chart
     departmentSpendingChart = new Chart(ctx, {
-        type: "doughnut",
-        data: {
-            labels: Object.keys(departmentSpending),
-            datasets: [
-                {
-                    data: Object.values(departmentSpending),
-                    backgroundColor: [
-                        "#3b82f6",
-                        "#10b981",
-                        "#8b5cf6",
-                        "#f59e0b",
-                        "#ef4444",
-                        "#ec4899",
-                        "#06b6d4",
-                    ],
-                    borderWidth: 0,
-                },
-            ],
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: "right",
-                    labels: {
-                        font: {
-                            size: 11,
-                        },
-                    },
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function (context) {
-                            return `Ksh${context.raw.toLocaleString()}`;
-                        },
-                    },
-                },
-            },
-            animation: {
-                duration: 1000,
-                easing: "easeOutQuart",
-            },
-        },
-    });
+      type: "doughnut",
+      data: {
+          labels: Object.keys(departmentSpending),
+          datasets: [
+              {
+                  data: Object.values(departmentSpending),
+                  backgroundColor: [
+                      "#3b82f6", // Procurement - Blue
+                      "#10b981", // Human Resource - Emerald
+                      "#8b5cf6", // Maintenance - Purple
+                      "#f59e0b", // Kitchen - Amber
+                      "#ef4444", // Registry - Red
+                      "#ec4899", // Dispensary - Pink
+                      "#06b6d4", // Agriculture - Cyan
+                      "#84cc16", // Applied Sciences - Lime
+                      "#f97316", // Building & Civil - Orange
+                      "#14b8a6", // Business Studies - Teal
+                      "#a855f7", // Computing - Violet
+                      "#eab308", // Electrical - Yellow
+                      "#dc2626", // Health Sciences - Dark Red
+                      "#f43f5e", // Hospitality - Rose
+                      "#64748b"  // Mechanical - Slate
+                  ],
+                  borderWidth: 2,
+                  borderColor: "#ffffff",
+              },
+          ],
+      },
+      options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+              legend: {
+                  position: "right",
+                  labels: {
+                      font: {
+                          size: 11,
+                          family: "'Inter', sans-serif",
+                      },
+                      usePointStyle: true,
+                      pointStyle: 'circle',
+                      padding: 15,
+                  },
+              },
+              tooltip: {
+                  callbacks: {
+                      label: function (context) {
+                          const value = context.raw;
+                          const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                          const percentage = ((value / total) * 100).toFixed(1);
+                          return `${context.label}: Ksh${value.toLocaleString()} (${percentage}%)`;
+                      },
+                  },
+                  backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                  titleFont: {
+                      size: 12,
+                  },
+                  bodyFont: {
+                      size: 11,
+                  },
+              },
+          },
+          animation: {
+              duration: 1000,
+              easing: "easeOutQuart",
+          },
+          cutout: "50%",
+      },
+  });
 }
-
 // Process AI Query (for dashboard AI)
 function processAIQuery(query) {
     const aiResponse = document.getElementById("aiResponse");
