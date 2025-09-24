@@ -397,100 +397,52 @@
           </section>
 
           <!-- Receipts & Issues Section -->
-<!-- Add this to your HTML section for receipts -->
-<div id="addReceiptModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full">
-    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
-        <div class="mt-3">
-            <h3 class="text-lg font-medium text-gray-900">Add Transaction</h3>
-            <form id="addReceiptForm" class="mt-4 space-y-4">
-                <!-- Transaction Type -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700">Transaction Type</label>
-                    <div class="mt-1 space-x-4">
-                        <label class="inline-flex items-center">
-                            <input type="radio" name="receiptType" value="receive" checked class="receiptType">
-                            <span class="ml-2">Receive</span>
-                        </label>
-                        <label class="inline-flex items-center">
-                            <input type="radio" name="receiptType" value="issue" class="receiptType">
-                            <span class="ml-2">Issue</span>
-                        </label>
-                    </div>
-                </div>
+          <section id="receiptsSection" class="content-section hidden">
+            <div class="flex justify-between items-center mb-6">
+              <h2 class="text-2xl font-semibold text-gray-800">
+                Receipts and Issues
+              </h2>
+              <div class="flex items-center">
+                <label class="flex items-center mr-4 text-gray-700">
+                  <span class="mr-2">Emergency Mode:</span>
+                  <label class="emergency-toggle">
+                    <input type="checkbox" id="emergencyModeToggle" />
+                    <span class="emergency-slider"></span>
+                  </label>
+                </label>
+                <button
+                  id="addReceiptBtn"
+                  class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center mr-2"
+                >
+                  <i class="fas fa-plus mr-2"></i> New Receipt
+                </button>
+                <button
+                  id="issueItemBtn"
+                  class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg flex items-center"
+                >
+                  <i class="fas fa-hand-holding mr-2"></i> Issue to User
+                </button>
+              </div>
+            </div>
 
-                <!-- Item Selection -->
-                <div>
-                    <label for="receiptItem" class="block text-sm font-medium text-gray-700">Item</label>
-                    <select id="receiptItem" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
-                        <option value="">Select Item</option>
-                    </select>
-                </div>
-
-                <!-- Quantity -->
-                <div>
-                    <label for="receiptQuantity" class="block text-sm font-medium text-gray-700">Quantity</label>
-                    <input type="number" id="receiptQuantity" required min="1" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
-                </div>
-
-                <!-- Department -->
-                <div>
-                    <label for="receiptDepartment" class="block text-sm font-medium text-gray-700">Department</label>
-                    <input type="text" id="receiptDepartment" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
-                </div>
-
-                <!-- Issued To/Received From -->
-                <div id="issuedToSection">
-                    <label for="issuedTo" class="block text-sm font-medium text-gray-700">Issued To</label>
-                    <select id="issuedTo" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
-                        <option value="">Select User</option>
-                    </select>
-                </div>
-
-                <div id="receivedFromSection" class="hidden">
-                    <label for="receivedFrom" class="block text-sm font-medium text-gray-700">Received From</label>
-                    <input type="text" id="receivedFrom" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2" placeholder="Supplier/Vendor Name">
-                </div>
-
-                <!-- Reference -->
-                <div>
-                    <label for="receiptReference" class="block text-sm font-medium text-gray-700">Reference Number</label>
-                    <input type="text" id="receiptReference" required class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2">
-                </div>
-
-                <!-- Notes -->
-                <div>
-                    <label for="receiptNotes" class="block text-sm font-medium text-gray-700">Notes</label>
-                    <textarea id="receiptNotes" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"></textarea>
-                </div>
-
-                <div class="flex space-x-3">
-                    <button type="submit" class="flex-1 bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">Add Transaction</button>
-                    <button type="button" id="cancelAddReceipt" class="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Update your receipts table to include the new columns -->
-<table class="min-w-full divide-y divide-gray-200">
-    <thead class="bg-gray-50">
-        <tr>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item Code</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item Name</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Department</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Issued To/Received From</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Reference</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
-            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-        </tr>
-    </thead>
-    <tbody id="receiptsTable" class="bg-white divide-y divide-gray-200">
-        <!-- Receipts will be populated here -->
-    </tbody>
-</table>
+            <div class="bg-white shadow-md rounded-lg overflow-hidden mb-6">
+              <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                  <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item Code</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item Name</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Department</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">From/To</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="receiptsTable" class="bg-white divide-y divide-gray-200">
+                  <!-- Receipts data will be populated here -->
+                </tbody>
+              </table>
             </div>
           </section>
 
