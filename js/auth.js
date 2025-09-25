@@ -10,7 +10,8 @@ document.addEventListener('DOMContentLoaded', function() {
       const password = document.getElementById("password").value;
 
       // Simple authentication (for demo purposes)
-      if (username === "admin" && (password === "password123" || password === "1234" || password === "admin")) {
+      const validPasswords = ["password123", "1234", "admin"];
+      if (username === "admin" && validPasswords.includes(password)) {
         document.getElementById("loginPage").classList.add("hidden");
         document.getElementById("appPage").classList.remove("hidden");
         
